@@ -1,0 +1,122 @@
+<?php
+
+
+function mymodule_menu() {
+  $items = array();
+  $items['my_module/form'] = array(
+    'title' => t('My form'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dropdown_page'),
+    'access arguments' => array('access content'),
+    'description' => t('My form'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function dropdown_page($form, &$form_state) {
+ 
+    $options_first = dropdown_first_dropdown_options();
+    $value_dropdown_first = isset($form_state['values']['dropdown_first']) ? $form_state['values']['dropdown_first'] : key($options_first);
+
+   
+    $form['name'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Name'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['name']['first'] = array(
+    '#type' => 'textfield',
+    '#title' => t('First name'),
+    '#required' => TRUE,
+    '#attributes' =>array('placeholder' => t('First name')),
+    /*'#default_value' => "First name",*/
+    '#description' => "Please enter your first name.",
+    '#size' => 20,
+    '#maxlength' => 20,
+  );
+  $form['name']['last'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Last name'),
+    '#attributes' =>array('placeholder' => t('Last name')),
+    '#required' => TRUE,
+  );
+  
+  $form['dateofbirth'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Date of Birth'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['dateofbirth']['year_of_birth'] = array(
+    '#type' => 'textfield',
+    '#title' => "Year of birth",
+    '#attributes' =>array('placeholder' => t('Birth Year')),
+    '#description' => 'Format is "YYYY"',
+  ); 
+  $form['dropdown'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Location'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+   $form['dropdown']['dropdown_first'] = array(
+        '#type' => 'select',
+        '#title' => 'Country',
+        '#options' => $options_first,
+        '#default_value' => $value_dropdown_first,
+        '#ajax' => array(
+            'event' => 'change',
+            'callback' => 'dropdown_ajax_callback',
+            'wrapper' => 'dropdown_second_replace',
+        ),
+    );
+    $form['dropdown']['dropdown_second'] = array(
+        '#type' => 'select',
+        '#title' => 'City',
+        '#prefix' => '<div id="dropdown_second_replace">',
+        '#suffix' => '</div>',
+        '#options' => dropdown_second_dropdown_options($value_dropdown_first),
+        '#default_value' => isset($form_state['values']['dropdown_second']) ? $form_state['values']['dropdown_second'] : '',
+    );
+    return $form;
+}
+
+function dropdown_ajax_callback($form, $form_state) {
+    return $form['dropdown']['dropdown_second'];
+}
+function dropdown_first_dropdown_options() {
+    return array(
+    	'select' => 'Select',
+        'india' => 'India',
+        'china' => 'China',
+        'uk' => 'UK',
+    );
+}
+
+function dropdown_second_dropdown_options($key = '') {
+    $options = array(
+        'india' => array(
+            'delhi' => 'Delhi',
+            'noida' => 'Noida',
+            'mainpuri' => 'Mainpuri'
+        ),
+        'china' => array(
+            'honkong' => 'Honkong',
+            'beijing' => 'Beijing',
+            'singapore' => 'Singapore'
+        ),
+        'uk' => array(
+            'london' => 'London',
+            'cambridge' => 'Cambridge',
+            'menchester' => 'Menchester'
+        ),  
+    );
+    if (isset($options[$key])) {
+        return $options[$key];
+    }
+    else {
+        return array();
+    }
+}

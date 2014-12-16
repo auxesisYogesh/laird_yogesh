@@ -1,0 +1,5 @@
+; $Id $
+name = My Form Module
+description = Form function
+package = Custom
+core = 7.x

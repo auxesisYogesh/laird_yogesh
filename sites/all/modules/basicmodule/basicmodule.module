@@ -1,0 +1,75 @@
+<?php
+function basicmodule_menu() {
+  $items = array();
+  $items['basicmodule/form'] = array(
+    'title' => 'My form',
+    'page callback' => 'basicmodule_form',
+    'access arguments' => array('access content'),
+    'description' => t('My form'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+function 
+
+basicmodule_form() {
+  return drupal_get_form('basicmodule_my_form');
+}
+function 
+
+basicmodule_my_form($form_state) {
+  $form['name'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Name'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['name']['first'] = array(
+    '#type' => 'textfield',
+    '#title' => t('First name'),
+    '#required' => TRUE,
+    '#attributes' =>array('placeholder' => t('First name')),
+    /*'#default_value' => "First name",*/
+    '#description' => "Please enter your first name.",
+    '#size' => 20,
+    '#maxlength' => 20,
+  );
+  $form['name']['last'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Last name'),
+    '#attributes' =>array('placeholder' => t('Last name')),
+    '#required' => TRUE,
+  );
+  $form['year_of_birth'] = array(
+    '#type' => 'textfield',
+    '#title' => "Year of birth",
+    '#attributes' =>array('placeholder' => t('Birth Year')),
+    '#description' => 'Format is "YYYY"',
+  );  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
+  return $form;
+}
+function 
+
+basicmodule_my_form_validate($form, &$form_state) {
+    $year_of_birth = $form_state['values']['year_of_birth'];
+    if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2014)) {
+        form_set_error('year_of_birth', 'Enter a year between 1900 and 2014.');
+    }
+  $first = $form_state['values']['first'];
+  if(preg_match('/[^A-Za-z]/', $first)) {
+    form_set_error('name', 'Firstname must be alphabetical');
+  }
+   $last = $form_state['values']['last'];
+  if(preg_match('/[^A-Za-z]/', $last)) {
+    form_set_error('name', 'Lastname must be alphabetical');
+  }
+}
+// Adds a submit handler/function to our form to send a successful 
+// completion message to the screen.
+function basicmodule_my_form_submit($form, &$form_state) {
+    drupal_set_message(t('submit succesfully.'));
+}

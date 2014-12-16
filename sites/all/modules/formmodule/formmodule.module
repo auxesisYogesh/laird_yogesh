@@ -1,0 +1,75 @@
+<?php
+
+function formmodule_menu() {
+  $items = array();
+  $items['formmodule/form'] = array(
+    'title' => t('My form'),
+    'page callback' => 'formmodule_form',
+    'access arguments' => array('access content'),
+    'description' => t('My form'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+function 
+
+formmodule_form() {
+  $newform= drupal_get_form('basicmodule_my_form');
+  /*print '<pre>';
+  print_r($newform);
+  print '<pre>';*/
+  unset($newform['year_of_birth']);
+  return $newform;
+  
+}
+
+
+
+/*function 
+
+formmodule_my_form($form_state) {
+  $form['name'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Name'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['name']['first'] = array(
+    '#type' => 'textfield',
+    '#title' => t('First name'),
+    '#required' => TRUE,
+    '#default_value' => "First name",
+    '#description' => "Please enter your first name.",
+    '#size' => 20,
+    '#maxlength' => 20,
+  );
+  $form['name']['last'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Last name'),
+    '#required' => TRUE,
+  );
+  $form['year_of_birth'] = array(
+    '#type' => 'textfield',
+    '#title' => "Year of birth",
+    '#description' => 'Format is "YYYY"',
+  );  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
+  return $form;
+}
+function 
+
+formmodule_my_form_validate($form, &$form_state) {
+    $year_of_birth = $form_state['values']['year_of_birth'];
+    if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
+        form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
+    }
+}
+// Adds a submit handler/function to our form to send a successful 
+// completion message to the screen.
+function formmodule_my_form_submit($form, &$form_state) {
+    dpm($form['message']);
+    drupal_set_message(t('submit succesfully.'));
+}*/

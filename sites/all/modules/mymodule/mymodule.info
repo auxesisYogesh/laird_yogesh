@@ -1,0 +1,5 @@
+; $Id $
+name = My Custom Module
+description = Custom function
+package = Custom
+core = 7.x
